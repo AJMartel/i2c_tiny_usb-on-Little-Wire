@@ -50,7 +50,7 @@
 
 /* --------------------------- Functional Range ---------------------------- */
 
-#define USB_CFG_HAVE_INTRIN_ENDPOINT    1
+#define USB_CFG_HAVE_INTRIN_ENDPOINT    0
 /* Define this to 1 if you want to compile a version with two endpoints: The
  * default control endpoint 0 and an interrupt-in endpoint 1.
  */
@@ -65,7 +65,7 @@
  * it is required by the standard. We have made it a config option because it
  * bloats the code considerably.
  */
-#define USB_CFG_INTR_POLL_INTERVAL      100
+#define USB_CFG_INTR_POLL_INTERVAL      10
 /* If you compile a version with endpoint 1 (interrupt-in), this is the poll
  * interval. The value is in milliseconds and must not be less than 10 ms for
  * low speed devices.
@@ -115,22 +115,35 @@ extern void usbEventResetReady(void);
 
 /* -------------------------- Device Description --------------------------- */
 
-/*
-	Please note: Do not use the Adafruit USB VID/PID without written permission 
-	from Adafruit Industries, LLC and Limor "Ladyada" Fried 
-	(support@adafruit.com). Permission is granted for littlewire, Ihsan Kehribar 
-	and Seeed Studio by Adafruit Industries, LLC to use the Adafruit 
-	USB VID/PID for littlewire (SKU:AVR06071P)
-*/
+#define  USB_CFG_VENDOR_ID       0xc0, 0x16 /* = 0x16c0 = 5824 = voti.nl */
+/* USB vendor ID for the device, low byte first. If you have registered your
+ * own Vendor ID, define it here. Otherwise you may use one of obdev's free
+ * shared VID/PID pairs. Be sure to read USB-IDs-for-free.txt for rules!
+ * *** IMPORTANT NOTE ***
+ * This template uses obdev's shared VID/PID pair for Vendor Class devices
+ * with libusb: 0x16c0/0x5dc.  Use this VID/PID pair ONLY if you understand
+ * the implications!
+ */
+#define  USB_CFG_DEVICE_ID       0xdc, 0x05 /* = 0x05dc = 1500 */
+/* This is the ID of the product, low byte first. It is interpreted in the
+ * scope of the vendor ID. If you have registered your own VID with usb.org
+ * or if you have licensed a PID from somebody else, define it here. Otherwise
+ * you may use one of obdev's free shared VID/PID pairs. See the file
+ * USB-IDs-for-free.txt for details!
+ * *** IMPORTANT NOTE ***
+ * This template uses obdev's shared VID/PID pair for Vendor Class devices
+ * with libusb: 0x16c0/0x5dc.  Use this VID/PID pair ONLY if you understand
+ * the implications!
+ */
 
-#define  USB_CFG_VENDOR_ID       0x81, 0x17
 /* USB vendor ID for the device, low byte first. If you have registered your
  * own Vendor ID, define it here. Otherwise you use obdev's free shared
  * VID/PID pair. Be sure to read USBID-License.txt for rules!
  * This template uses obdev's shared VID/PID pair for HIDs: 0x16c0/0x5df.
  * Use this VID/PID pair ONLY if you understand the implications!
  */
-#define  USB_CFG_DEVICE_ID       0x9f, 0x0c
+
+
 /* This is the ID of the product, low byte first. It is interpreted in the
  * scope of the vendor ID. If you have registered your own VID with usb.org
  * or if you have licensed a PID from somebody else, define it here. Otherwise
@@ -139,13 +152,29 @@ extern void usbEventResetReady(void);
  * This template uses obdev's shared VID/PID pair for HIDs: 0x16c0/0x5df.
  * Use this VID/PID pair ONLY if you understand the implications!
  */
-#define USB_CFG_DEVICE_VERSION  0x04, 0x01
+
+
+/* This is the FTDI VID/PID pair originally used by i2c_tiny_usb. Do not 
+ * distribute firmware or devices with this ID without written permission
+ * from...FTDI and Till Harbaum? If you are looking at this file, you know
+ * better.
+ */
+// #undef USB_CFG_VENDOR_ID
+// #define  USB_CFG_VENDOR_ID       0x03, 0x04 
+// #undef USB_CFG_DEVICE_ID
+// #define  USB_CFG_DEVICE_ID       0x31, 0xc6
+
 /* Version number of the device: Minor number first, then major number.
  */
-#define USB_CFG_VENDOR_NAME     'o', 'b', 'd', 'e', 'v', '.', 'a', 't'
-#define USB_CFG_VENDOR_NAME_LEN 8
-#undef USB_CFG_VENDOR_NAME
-#undef USB_CFG_VENDOR_NAME_LEN
+#define USB_CFG_DEVICE_VERSION  0x01, 0x02
+
+// #define USB_CFG_VENDOR_NAME     'o', 'b', 'd', 'e', 'v', '.', 'a', 't'
+// #define USB_CFG_VENDOR_NAME_LEN 8
+//#undef USB_CFG_VENDOR_NAME
+//#undef USB_CFG_VENDOR_NAME_LEN
+#define USB_CFG_VENDOR_NAME 'n', 'o', 'p', '.', 'c', 'o', 'm'
+#define USB_CFG_VENDOR_NAME_LEN 7
+
 /* These two values define the vendor name returned by the USB device. The name
  * must be given as a list of characters under single quotes. The characters
  * are interpreted as Unicode (UTF-16) entities.
@@ -154,8 +183,8 @@ extern void usbEventResetReady(void);
  * obdev's free shared VID/PID pair. See the file USBID-License.txt for
  * details.
  */
-#define USB_CFG_DEVICE_NAME     'U', 'S', 'B', 't', 'i', 'n', 'y', 'S', 'P', 'I'
-#define USB_CFG_DEVICE_NAME_LEN 10
+#define	USB_CFG_DEVICE_NAME		'i','2','c','-','t','i','n','y','-','u','s','b',' ','o','n',' ','l','i','t','t','l','e','W','i','r','e'
+#define	USB_CFG_DEVICE_NAME_LEN	26
 /* Same as above for the device name. If you don't want a device name, undefine
  * the macros. See the file USBID-License.txt before you assign a name if you
  * use a shared VID/PID.
@@ -169,13 +198,13 @@ extern void usbEventResetReady(void);
  * to fine tune control over USB descriptors such as the string descriptor
  * for the serial number.
  */
-#define USB_CFG_DEVICE_CLASS        0
+#define USB_CFG_DEVICE_CLASS        0xff
 #define USB_CFG_DEVICE_SUBCLASS     0
 /* See USB specification if you want to conform to an existing device class.
  */
-#define USB_CFG_INTERFACE_CLASS     0xff   /* HID */
-#define USB_CFG_INTERFACE_SUBCLASS  0   /* no boot interface */
-#define USB_CFG_INTERFACE_PROTOCOL  0   /* no protocol */
+#define USB_CFG_INTERFACE_CLASS     0
+#define USB_CFG_INTERFACE_SUBCLASS  0
+#define USB_CFG_INTERFACE_PROTOCOL  0
 /* See USB specification if you want to conform to an existing device class or
  * protocol.
  */
