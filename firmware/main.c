@@ -623,7 +623,7 @@ int main(void) {
 
     i2c_init();
 
-    i2c_scan();
+    // i2c_scan();
     
     usbDeviceDisconnect();
     for(i=0;i<20;i++){  /* 300 ms disconnect */
