@@ -17,3 +17,5 @@ Note that you will need to edit usbconfig.h to set proper vendor/device IDs.
 
 It's possible to build a kernel driver for LittleWire directly, but
 the USB interrupt endpoint model complicates error handling.
+
+See <https://github.com/nopdotcom/i2c_tiny_usb-on-Little-Wire/wiki/BuildingOnLinux> for an example of how to build.
